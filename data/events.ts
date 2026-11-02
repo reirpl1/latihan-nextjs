@@ -70,6 +70,16 @@ export const events: Event[] = [
     kuota: 60,
     terisi: 18,
   },
+  {
+    id: 7,
+    judul: "Lomba Bahasa Inggris",
+    kategori: "Lomba",
+    tanggal: "2026-12-20",
+    lokasi: "Aula",
+    harga: 15000,
+    kuota: 30,
+    terisi: 15,
+  },
 ];
 
 export function rupiah(n: number) {
