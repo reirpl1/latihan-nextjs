@@ -72,8 +72,8 @@ export const events: Event[] = [
   },
   {
     id: 7,
-    judul: "Lomba Bahasa Inggris",
-    kategori: "Lomba",
+    judul: "Workshop Bahasa Prancis Cocok untuk Pemula",
+    kategori: "Workshop",
     tanggal: "2026-12-20",
     lokasi: "Aula",
     harga: 15000,
