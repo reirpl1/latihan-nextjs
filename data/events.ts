@@ -76,7 +76,7 @@ export const events: Event[] = [
     kategori: "Workshop",
     tanggal: "2026-12-20",
     lokasi: "Aula",
-    harga: 15000,
+    harga: 20000,
     kuota: 30,
     terisi: 15,
   },
