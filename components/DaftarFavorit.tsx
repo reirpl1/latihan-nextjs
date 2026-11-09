@@ -31,14 +31,20 @@ export default function DaftarFavorit() {
     return <p className="text-slate-500">Belum ada favorit</p>;
 
   return (
-    <ul className="space-y-2">
+    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {daftar.map((e) => (
-        <li key={e.id}>
-          <Link
-            href={`/event/${e.id}`}
-            className="text-blue-600 hover:underline"
-          >
-            {e.judul} - {rupiah(e.harga)}
+        <li
+          key={e.id}
+          className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow"
+        >
+          <Link href={`/event/${e.id}`} className="block">
+            <h3 className="font-semibold text-slate-800 text-lg mb-2">
+              {e.judul}
+            </h3>
+
+            <p className="text-blue-600 font-bold">{rupiah(e.harga)}</p>
+
+            <p className="text-sm text-slate-500 mt-3">Lihat detail event →</p>
           </Link>
         </li>
       ))}
