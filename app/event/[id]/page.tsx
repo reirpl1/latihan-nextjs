@@ -3,6 +3,7 @@ import Link from "next/link"; // 1. Impor Link dari next/link
 import { events, rupiah } from "@/data/events";
 import FormPesan from "@/components/FormPesan";
 import TombolFavorit from "@/components/TombolFavorit";
+import { cookies } from "next/headers";
 
 export default async function Detail({ params }: PageProps<"/event/[id]">) {
   const { id } = await params;
@@ -15,6 +16,7 @@ export default async function Detail({ params }: PageProps<"/event/[id]">) {
   );
 
   const sisa = event.kuota - event.terisi;
+  const namaAwal = (await cookies()).get("nama")?.value ?? "";
 
   return (
     <article className="rounded-xl border bg-white p-6">
@@ -30,7 +32,7 @@ export default async function Detail({ params }: PageProps<"/event/[id]">) {
         Sisa {sisa} dari {event.kuota} tiket
       </p>
       <TombolFavorit id={event.id} />
-      <FormPesan event={event} />
+      <FormPesan event={event} namaAwal={namaAwal} />
 
       {/* 3. Tampilkan Bagian Event Terkait di Bawah Formulir */}
       <section className="mt-8 border-t pt-4">
