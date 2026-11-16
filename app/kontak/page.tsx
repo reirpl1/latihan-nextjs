@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Kontak",
+};
+
 export default function Kontak() {
   return (
     <div className="py-10">

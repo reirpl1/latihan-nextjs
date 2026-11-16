@@ -1,8 +1,13 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { pesanan } from "@/data/pesanan";
 import { rupiah } from "@/data/events";
 import { batalkanPesanan } from "@/app/actions";
 import { cookies } from "next/headers";
+
+export const metadata: Metadata = {
+  title: "Daftar Pesanan",
+};
 
 export default async function HalamanPesanan() {
   const namaSaya = (await cookies()).get("nama")?.value;
