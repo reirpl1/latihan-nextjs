@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { alamatHalaman } from "@/data/saring";
+import { type Saringan } from "@/data/saring"; // <--- Impor Saringan dari file data/saring
 
 interface HalamanProps {
-  s: any;
+  s: Saringan; // <--- Gunakan tipe Saringan di sini
   hal: number;
   jumlah: number;
 }
