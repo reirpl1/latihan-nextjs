@@ -1,23 +1,26 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { pesanan } from "@/data/pesanan";
+import { cookies } from "next/headers";
+import Link from "next/link";
+import { ambilPesanan } from "@/data/ambil";
 import { rupiah } from "@/data/events";
 import { batalkanPesanan } from "@/app/actions";
-import { cookies } from "next/headers";
 
-export const metadata: Metadata = {
-  title: "Daftar Pesanan",
-};
+export const metadata: Metadata = { title: "Daftar Pesanan" };
 
 export default async function HalamanPesanan() {
-  const namaSaya = (await cookies()).get("nama")?.value;
-
+  const pesanan = await ambilPesanan();
+  const namaSaya = (await cookies()).get("nama")?.value ?? "";
   const totalTiket = pesanan.reduce((t, p) => t + p.jumlah, 0);
   const pendapatan = pesanan.reduce((t, p) => t + p.total, 0);
 
   return (
     <div>
-      <h1 className="mb-2 text-2xl font-bold">Daftar Pesanan</h1>
+      <h1 className="mb-2 text-2xl font-bold"> Daftar</h1>
+      {namaSaya && (
+        <p className="mb-2 text-slate-600">
+          Halo, {namaSaya}! Pesanan ditandai &quot;Kamu&quot;.
+        </p>
+      )}
       {pesanan.length === 0 ? (
         <p className="text-slate-500">
           Belum ada pesanan.{" "}
@@ -36,43 +39,45 @@ export default async function HalamanPesanan() {
               <tr>
                 <th className="p-2">#</th>
                 <th className="p-2">Event</th>
-                <th className="p-2">Pemesanan</th>
+                <th className="p-2">Pemesan</th>
                 <th className="p-2">Tiket</th>
                 <th className="p-2">Total</th>
-                <th className="p-2">Aksi</th>
+                <th className="p-2">Waktu</th>
+                <th className="p-2"></th>
               </tr>
             </thead>
             <tbody>
-              {pesanan.map((p) => {
-                const adalahMilikku = p.nama === namaSaya;
-
-                return (
-                  <tr key={p.nomor} className="border-t">
-                    <td className="p-2">{p.nomor}</td>
-                    <td className="p-2">{p.judul}</td>
-                    <td className="p-2">
-                      {p.nama}
-                      {adalahMilikku && (
-                        <span className="ml-1 text-xs text-blue-600 font-semibold">
-                          (Kamu)
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-2">{p.jumlah}</td>
-                    <td className="p-2">{rupiah(p.total)}</td>
-                    <td className="p-2">
-                      {adalahMilikku && (
-                        <form action={batalkanPesanan}>
-                          <input type="hidden" name="nomor" value={p.nomor} />
-                          <button className="text-red-600 underline">
-                            Batalkan
-                          </button>
-                        </form>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
+              {pesanan.map((p) => (
+                <tr key={p.nomor} className="border-t">
+                  <td className="p-2">{p.nomor}</td>
+                  <td className="p-2">
+                    {p.events?.judul ?? "(event dihapus)"}
+                  </td>
+                  <td className="p-2">
+                    {p.nama}{" "}
+                    {p.nama === namaSaya && (
+                      <span className="ml-2 rounded bg-green-100 px-2 py=0.5 text-xs text-green-700">
+                        Kamu
+                      </span>
+                    )}
+                  </td>
+                  <td className="p-2">{p.jumlah}</td>
+                  <td className="p-2">{rupiah(p.total)}</td>
+                  <td className="p-2">
+                    {new Date(p.dibuat).toLocaleString("id-ID")}
+                  </td>
+                  <td className="p-2">
+                    {p.nama === namaSaya && (
+                      <form action={batalkanPesanan}>
+                        <input type="hidden" name="nomor" value={p.nomor} />
+                        <button className="text-red-600 underline">
+                          Batalkan
+                        </button>
+                      </form>
+                    )}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </>

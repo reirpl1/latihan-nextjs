@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { Event } from "@/data/events";
+import type { Pesanan } from "@/data/pesanan";
 
 export async function ambilEvents(): Promise<Event[]> {
   const { data, error } = await supabase
@@ -53,4 +54,10 @@ export async function hitungRingkasanPesanan(eventId: number) {
   );
 
   return { jumlahPesanan, jumlahTiket };
+}
+
+export async function ambilPesanan(): Promise<Pesanan[]> {
+  const { data, error } = await supabaseAdmin.from("pesanan").select("*, events(judul)").order("nomor", { ascending: false });
+  if (error) throw new Error("Gagal memuat pesanan: " + error.message);
+  return data as Pesanan[];
 }
