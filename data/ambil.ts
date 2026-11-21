@@ -3,11 +3,15 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { Event } from "@/data/events";
 import type { Pesanan } from "@/data/pesanan";
 
-export async function ambilEvents(): Promise<Event[]> {
-  const { data, error } = await supabase
-    .from("events")
-    .select("*")
-    .order("tanggal");
+export async function ambilEvents(q?: string): Promise<Event[]> {
+  let query = supabase.from("events").select("*");
+
+  // Jika ada kata kunci pencarian, filter berdasarkan judul
+  if (q) {
+    query = query.ilike("judul", `%${q}%`);
+  }
+
+  const { data, error } = await query.order("tanggal");
   if (error) throw new Error("Gagal memuat event: " + error.message);
   return data as Event[];
 }
@@ -18,7 +22,7 @@ export async function ambilEvent(id: number): Promise<Event | null> {
   const { data, error } = await supabase
     .from("events")
     .select("*")
-    .eq("id", id) // equal(sama dengan)
+    .eq("id", id) // equal (sama dengan)
     .maybeSingle();
   if (error) throw new Error("Gagal memuat event: " + error.message);
   return data as Event | null;
@@ -29,7 +33,7 @@ export async function ambilTerkait(event: Event): Promise<Event[]> {
     .from("events")
     .select("*")
     .eq("kategori", event.kategori)
-    .neq("id", event.id) //not equal (tidak sama dengan)
+    .neq("id", event.id) // not equal (tidak sama dengan)
     .order("tanggal");
   if (error) throw new Error("Gagal memuat event terkait: " + error.message);
   return data as Event[];
@@ -57,7 +61,10 @@ export async function hitungRingkasanPesanan(eventId: number) {
 }
 
 export async function ambilPesanan(): Promise<Pesanan[]> {
-  const { data, error } = await supabaseAdmin.from("pesanan").select("*, events(judul)").order("nomor", { ascending: false });
+  const { data, error } = await supabaseAdmin
+    .from("pesanan")
+    .select("*, events(judul)")
+    .order("nomor", { ascending: false });
   if (error) throw new Error("Gagal memuat pesanan: " + error.message);
   return data as Pesanan[];
 }
