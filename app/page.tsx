@@ -8,7 +8,7 @@ export default async function Beranda() {
   return (
     <div>
       <section className="py-12 text-center">
-        <h1 className="text-4xl font-bold"> Temukan event seru di sekolahmu</h1>
+        <h1 className="text-4xl font-bold"> Temukan Event Seru di Sekolahmu</h1>
         <p className="mt-3 text-slate-600">
           Workshop, lomba, musik, dan bazar. Pesan tiketnya di sini.
         </p>
