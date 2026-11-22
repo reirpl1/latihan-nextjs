@@ -79,8 +79,7 @@ export async function masuk(
   // Jika sandi benar, hapus cookie pembatas upaya login
   cookieStore.delete(NAMA_COOKIE_UPAYA);
 
-  // Buat sesi login yang sah
-  cookieStore.set(NAMA_COOKIE, await buatToken("admin"), {
+  cookieStore.set(NAMA_COOKIE, await buatToken(), {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",

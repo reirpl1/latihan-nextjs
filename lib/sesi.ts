@@ -24,7 +24,7 @@ async function tandatangani(isi: string) {
     .join("");
 }
 
-export async function buatToken(isi: string) {
+export async function buatToken() {
   const habis = String(Date.now() + UMUR_SESI * 1000);
   return `${habis}.${await tandatangani(habis)}`;
 }
@@ -33,12 +33,11 @@ export async function tokenSah(token: string | undefined) {
   if (!token) return false;
   const [habis, tanda] = token.split(".");
   if (!habis || !tanda) return false;
-  if (!(Number(habis) > Date.now())) return false; //sudah kadaluwarsa (atau bukan angka)
+  if (!(Number(habis) > Date.now())) return false; // sudah kadaluwarsa (atau bukan angka)
   return tanda === (await tandatangani(habis));
 }
 
-// Dipanggil  di awal setiap halaman dan server action admin. proxy.ts saja tidak cukup;
-// Server Action bisa dipanggil langsung, jadi harsu memeriksa sendiri.
+// Dipanggil di awal setiap halaman dan server action admin.
 export async function pastikanAdmin() {
   const token = (await cookies()).get(NAMA_COOKIE)?.value;
   if (!(await tokenSah(token))) redirect("/login");

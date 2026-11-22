@@ -10,43 +10,42 @@ export default function FormMasuk({ dari }: { dari: string }) {
   );
 
   const [sisaDetik, setSisaDetik] = useState(0);
-  const [batasWaktu, setBatasWaktu] = useState<number | null>(null);
+  const [durasiTunggu, setDurasiTunggu] = useState<number | null>(null);
+  const [hasilSebelumnya, setHasilSebelumnya] = useState(hasil);
 
-  // 1. Mengambil waktu tunggu dari pesan server
-  useEffect(() => {
-    if (!hasil?.pesan) return;
+  // 1. Ambil angka detiknya saja saat render (murni tanpa Date.now)
+  if (hasil !== hasilSebelumnya) {
+    setHasilSebelumnya(hasil);
 
-    const match = hasil.pesan.match(/dalam (\d+) detik/);
+    if (hasil?.pesan) {
+      const match = hasil.pesan.match(/dalam (\d+) detik/);
 
-    if (match) {
-      const detik = parseInt(match[1], 10);
-
-      setBatasWaktu(Date.now() + detik * 1000);
+      if (match) {
+        setDurasiTunggu(parseInt(match[1], 10));
+      }
     }
-  }, [hasil]);
+  }
 
-  // 2. Menjalankan countdown secara otomatis setiap detik
+  // 2. Hitung Date.now() dan jalankan countdown di dalam useEffect
   useEffect(() => {
-    if (batasWaktu === null) return;
+    if (durasiTunggu === null) return;
+
+    const batasWaktu = Date.now() + durasiTunggu * 1000;
 
     const hitungMundur = () => {
       const selisih = Math.max(0, Math.ceil((batasWaktu - Date.now()) / 1000));
-
       setSisaDetik(selisih);
 
       if (selisih === 0) {
-        setBatasWaktu(null);
+        setDurasiTunggu(null);
       }
     };
 
-    // Langsung perbarui angka
     hitungMundur();
-
-    // Perbarui setiap 1 detik
     const timer = setInterval(hitungMundur, 1000);
 
     return () => clearInterval(timer);
-  }, [batasWaktu]);
+  }, [durasiTunggu]);
 
   const dikunci = sedangKirim || sisaDetik > 0;
 

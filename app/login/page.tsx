@@ -6,11 +6,11 @@ import FormMasuk from "@/components/FormMasuk";
 
 export const metadata: Metadata = { title: "Masuk Admin" };
 
-type PageProps<T extends string> = {
+type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default async function Login({ searchParams }: PageProps<"/login">) {
+export default async function Login({ searchParams }: PageProps) {
   const { dari } = await searchParams;
   // sudah masuk? tidak perlu melihat formulir lagi
   if (await tokenSah((await cookies()).get(NAMA_COOKIE)?.value))

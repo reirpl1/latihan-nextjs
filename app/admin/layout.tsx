@@ -6,16 +6,16 @@ export const metadata: Metadata = {
   title: { default: "Admin", template: "%s . Admin" },
 };
 
-type LayoutProps<T extends string> = {
+type LayoutProps = {
   children: React.ReactNode;
   params?: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
+export default async function AdminLayout({ children }: LayoutProps) {
   await pastikanAdmin();
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between rounded-lg bg-slate-800 px-4 pu-2 text-white">
+      <div className="mb-6 flex items-center justify-between rounded-lg bg-slate-800 px-4 py-2 text-white">
         <span className="font-semibold"> Panel Admin</span>
         <form action={keluar}>
           <button className="text-sm underline">Keluar</button>
